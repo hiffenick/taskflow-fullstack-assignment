@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Welcome from "./pages/Welcome.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 function App() {
-  const [message, setMessage] = useState("Connecting to backend...");
-
-  useEffect(() => {
-    fetch("http://127.0.0.1:5000/")
-      .then((response) => response.json())
-      .then((data) => setMessage(data.message))
-      .catch(() => setMessage("Backend connection failed ❌"));
-  }, []);
-
   return (
-    <div>
-      <h1>TaskFlow</h1>
-      <p>{message}</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
