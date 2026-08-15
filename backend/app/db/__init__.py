@@ -3,7 +3,11 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-DATABASE = BASE_DIR / "instance" / "taskflow.db"
+INSTANCE_DIR = BASE_DIR / "instance"
+
+INSTANCE_DIR.mkdir(parents=True, exist_ok=True)
+
+DATABASE = INSTANCE_DIR / "taskflow.db"
 
 
 def get_db():

@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000/api";
+const API_URL = "https://taskflow-backend-q1x7.onrender.com/api";
 
 export async function getBoard() {
   const response = await fetch(`${API_URL}/board`);
