@@ -27,11 +27,8 @@ export default function Welcome() {
             Plan, manage, and track your tasks in one simple workspace.
           </p>
           <div className="flex gap-3.5 flex-wrap justify-center md:justify-start">
-            <Button variant="primary" onClick={() => navigate("/signup")}>
+            <Button variant="primary" onClick={() => navigate("/board")}>
               Get Started
-            </Button>
-            <Button variant="secondary" onClick={() => navigate("/login")}>
-              Log In
             </Button>
           </div>
         </div>
