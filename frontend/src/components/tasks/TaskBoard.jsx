@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getBoard, createTask, updateTask ,deleteTask} from "../../services/api.js";
+import { getBoard,
+  createTask,
+  updateTask,
+  deleteTask,
+  moveTask} from "../../services/api.js";
 import Logo from "../common/Logo.jsx";
 import Button from "../button/Button.jsx";
 import TaskColumn from "./TaskColumn.jsx";
@@ -130,10 +134,38 @@ const handleDelete = async (id) => {
   }
 };
 
-  const handleMove = async (id, status) => {
-    // We'll connect this to PATCH next.
-    console.log("Move task:", id, status);
+const handleMove = async (id, status) => {
+  const columnMap = {
+    todo: 1,
+    "in-progress": 2,
+    done: 3,
   };
+
+  const columnId = columnMap[status];
+
+  if (!columnId) return;
+
+  try {
+    setError("");
+
+    const updatedTask = await moveTask(id, columnId);
+
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              ...updatedTask,
+              status,
+              createdAt: updatedTask.created_at,
+            }
+          : task
+      )
+    );
+  } catch (err) {
+    setError(err.message || "Failed to move task.");
+  }
+};
 
   const visibleTasks =
     priorityFilter === "All"

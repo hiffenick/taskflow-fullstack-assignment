@@ -60,3 +60,23 @@ export async function deleteTask(id) {
 
   return data;
 }
+
+export async function moveTask(id, columnId) {
+  const response = await fetch(`${API_URL}/tasks/${id}/move`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      column_id: columnId,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to move task.");
+  }
+
+  return data;
+}
