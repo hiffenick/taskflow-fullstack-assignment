@@ -205,6 +205,12 @@ const handleMove = async (id, status) => {
       </header>
 
       <main className="max-w-[1100px] mx-auto px-8 py-8">
+        {error && (
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+        
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div className="flex items-center gap-2">
             <label

@@ -64,6 +64,9 @@ def get_board():
 
 
 def create_task(column_id, title, description=None, priority="Medium"):
+    if not column_id:
+        raise ValueError("Column is required.")
+    
     if not title or not title.strip():
         raise ValueError("Task title is required.")
 

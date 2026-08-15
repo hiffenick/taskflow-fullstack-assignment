@@ -3,13 +3,14 @@ const API_URL = "http://127.0.0.1:5000/api";
 export async function getBoard() {
   const response = await fetch(`${API_URL}/board`);
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("Failed to load board.");
+    throw new Error(data.error || "Failed to load board.");
   }
 
-  return response.json();
+  return data;
 }
-
 export async function createTask(task) {
   const response = await fetch(`${API_URL}/tasks`, {
     method: "POST",
