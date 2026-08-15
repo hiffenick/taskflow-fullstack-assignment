@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBoard, createTask } from "../../services/api.js";
+import { getBoard, createTask, updateTask ,deleteTask} from "../../services/api.js";
 import Logo from "../common/Logo.jsx";
 import Button from "../button/Button.jsx";
 import TaskColumn from "./TaskColumn.jsx";
@@ -68,45 +68,67 @@ export default function TaskBoard() {
     setEditingTask(null);
   };
 
-  const handleSubmit = async (values) => {
+const handleSubmit = async (values) => {
   try {
     setError("");
 
     if (editingTask) {
-      // Edit will be connected next.
-      return;
+      const updatedTask = await updateTask(editingTask.id, {
+        title: values.title,
+        description: values.description,
+        priority: values.priority,
+      });
+
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === editingTask.id
+            ? {
+                ...task,
+                ...updatedTask,
+                createdAt: updatedTask.created_at,
+              }
+            : task
+        )
+      );
+    } else {
+      const newTask = await createTask({
+        column_id: 1,
+        title: values.title,
+        description: values.description,
+        priority: values.priority,
+      });
+
+      setTasks((prev) => [
+        ...prev,
+        {
+          ...newTask,
+          status: "todo",
+          createdAt: newTask.created_at,
+        },
+      ]);
     }
-
-    const newTask = await createTask({
-      column_id: 1,
-      title: values.title,
-      description: values.description,
-      priority: values.priority,
-    });
-
-    setTasks((prev) => [
-      ...prev,
-      {
-        ...newTask,
-        status: "todo",
-        createdAt: newTask.created_at,
-      },
-    ]);
 
     closeModal();
   } catch (err) {
-    setError(err.message || "Failed to create task.");
+    setError(err.message || "Failed to save task.");
   }
 };
 
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm("Delete this task?");
+const handleDelete = async (id) => {
+  const confirmed = window.confirm("Delete this task?");
 
-    if (!confirmed) return;
+  if (!confirmed) return;
 
-    // We'll connect this to DELETE next.
-    console.log("Delete task:", id);
-  };
+  try {
+    setError("");
+
+    await deleteTask(id);
+
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+  } catch (err) {
+    setError(err.message || "Failed to delete task.");
+  }
+};
 
   const handleMove = async (id, status) => {
     // We'll connect this to PATCH next.
